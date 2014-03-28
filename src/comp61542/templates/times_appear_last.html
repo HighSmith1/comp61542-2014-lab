@@ -7,7 +7,7 @@
 <script src="http://www.allmyscripts.com/Table_Sort/gs_sortable.js"></script>
 <script type="text/javascript">
 <!--
-var TSort_Data = new Array ('my_table', 's', 'i', 'i', 'i', 'i', 'i');
+var TSort_Data = new Array ('my_table', 's', 'i');
 tsRegister();
 // -->
 </script>
@@ -16,8 +16,7 @@ tsRegister();
   <thead>
     <tr>
     {% for column in args.data[0] %}
-      <th>
-         {{ column }}</th>
+      <th>{{ column }}</th>
     {% endfor %}
     </tr>
   </thead>
@@ -32,5 +31,4 @@ tsRegister();
   {% endfor %}
   </tbody>
 </table>
-
 {% endblock %}

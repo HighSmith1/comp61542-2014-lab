@@ -213,7 +213,7 @@ class Database:
         header = ("Author", "Number of conference papers",
             "Number of journals", "Number of books",
             "Number of book chapers", "Total")
-
+        
         astats = [ [0, 0, 0, 0] for _ in range(len(self.authors)) ]
         for p in self.publications:
             for a in p.authors:
@@ -221,8 +221,45 @@ class Database:
 
         data = [ [self.authors[i].name] + astats[i] + [sum(astats[i])]
             for i in range(len(astats)) ]
+
+#        sorted by authors name.
+#        data.sort(cmp=None, key=lambda l:l[0], reverse=True)
         return (header, data)
 
+
+    def get_stats_for_specific_author(self,authors_name):
+        header = ("Author", "Number of conference papers",
+            "Number of journals", "Number of books",
+            "Number of book chapers", "Total", "Number of Co-authors")
+            
+        auth = authors_name    
+        astats = [ [0, 0, 0, 0] for _ in range(len(self.authors)) ]
+        for p in self.publications:
+            for a in p.authors:
+                astats[a][p.pub_type] += 1
+        
+        coauthors = {}
+        for p in self.publications:
+            for a in p.authors:
+                    for a2 in p.authors:
+                        if a != a2:
+                            try:
+                                coauthors[a].add(a2)
+                            except KeyError:
+                                coauthors[a] = set([a2])
+                                
+                     
+        for i in range(len(astats)):
+            if (auth == self.authors[i].name) :
+                data = [ [auth] + astats[i] + [sum(astats[i])] + [len(coauthors[i])]] 
+                break
+            else :
+                data = [ ['Author does not exist  '] + [0, 0, 0, 0] + [0] + [0]]
+              
+        return (header, data)
+    
+    
+    
     def get_average_authors_per_publication_by_year(self, av):
         header = ("Year", "Conference papers",
             "Journals", "Books",
@@ -282,11 +319,50 @@ class Database:
             + [ func(ystats[y].sum(axis=1)) ]
             for y in ystats ]
         return (header, data)
-
+    
+    
+    def get_times_an_author_appears_first(self):
+        header = ("Author", "Appears first in")
+          
+        stats = {}
+        
+        for p in self.publications:
+            for a in p.authors:
+                if stats.has_key(a):
+                    stats[a] += 1
+                    break
+                else:
+                    stats[a] = 1
+                    break   
+        
+        data = [ [self.authors[key].name] + [value] for key, value in stats.iteritems()]             
+              
+        return (header, data)
+    
+    
+    def get_times_an_author_appears_last(self):
+        header = ("Author", "Appears last in")
+         
+        stats2 = {}  
+                    
+        for p in self.publications:
+            for a in reversed(p.authors):
+                if stats2.has_key(a):
+                    stats2[a] += 1
+                    break
+                else:
+                    stats2[a] = 1
+                    break         
+                          
+        data = [ [self.authors[key].name] + [value] for key, value in stats2.iteritems()]             
+              
+        return (header, data)
+    
+    
     def get_author_totals_by_year(self):
         header = ("Year", "Number of conference papers",
             "Number of journals", "Number of books",
-            "Number of book chapers", "Total")
+            "Number of book chapters", "Total")
 
         ystats = {}
         for p in self.publications:

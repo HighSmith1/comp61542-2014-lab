@@ -117,3 +117,45 @@ def showPublicationSummary(status):
         args["data"] = db.get_author_totals_by_year()
 
     return render_template('statistics_details.html', args=args)
+
+
+
+#New code
+@app.route("/search_authors")
+def showAuthorSearch():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset}
+    
+    authors_name = ' '
+    if "authors_name" in request.args:
+        authors_name = request.args.get("authors_name")
+       
+    args["data"] = db.get_stats_for_specific_author(authors_name)
+    args["authors_name"] = authors_name
+    args["title"] = "Search Authors"
+    
+    return render_template('search_authors.html', args=args)
+
+#New code
+@app.route("/times_appear_first")
+def showTimesAppearsFirst():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset}
+    
+    args["data"] = db.get_times_an_author_appears_first()
+    args["title"] = "Times an author appears first"
+    
+    return render_template('times_appear_first.html', args=args)
+
+@app.route("/times_appear_last")
+def showTimesAppearsSecond():
+    dataset = app.config['DATASET']
+    db = app.config['DATABASE']
+    args = {"dataset":dataset}
+    
+    args["data"] = db.get_times_an_author_appears_last()
+    args["title"] = "Times an author appears last"
+    
+    return render_template('times_appear_last.html', args=args)

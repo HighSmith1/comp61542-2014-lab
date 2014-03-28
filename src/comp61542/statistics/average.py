@@ -26,10 +26,19 @@ def mode(X):
             d[item] += 1
         else:
             d[item] = 1
-
+    
+    
+#New code added to cope with test failures
+    l = []
     m = (0, 0)
     for key in d.keys():
         if d[key] > m[1]:
+            del l[:]
             m = (key, d[key])
+            l.append(key)
+        elif d[key] == m[1]:
+            m = (key, d[key])
+            l.append(key)
+        
 
-    return [m[0]]
+    return l

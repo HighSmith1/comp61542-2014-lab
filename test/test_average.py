@@ -45,7 +45,7 @@ class TestAverage(unittest.TestCase):
 
     def test_mode_is_correct_for_multimodal_dataset(self):
         self.assertEqual(average.mode([1, 1, 2, 2, 3, 3]), [1, 2, 3])
-
+    
     def test_mode_is_sorted_for_multiple_values(self):
         self.assertEqual(average.mode([2, 2, 1, 1]), [1, 2])
 

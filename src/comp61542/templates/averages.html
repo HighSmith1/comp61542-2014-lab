@@ -4,7 +4,17 @@
 <h1>{{ args.title }}</h1>
 {% for table in args.tables %}
 <h2>{{ table.title }}</h2>
-<table>
+
+
+<script src="http://www.allmyscripts.com/Table_Sort/gs_sortable.js"></script>
+<script type="text/javascript">
+<!--
+var TSort_Data = new Array ('my_table', 's', 'f', 'f', 'f', 'f', 'f');
+tsRegister();
+// -->
+</script>
+
+<table id="my_table">
   <thead>
     <tr>
       {% for column in table.header %}

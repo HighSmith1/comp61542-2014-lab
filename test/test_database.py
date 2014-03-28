@@ -159,6 +159,78 @@ class TestDatabase(unittest.TestCase):
             "incorrect year in result")
         self.assertEqual(data[0][1], 2,
             "incorrect number of authors in result")
+        
+    def test_get_particular_author(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        header, data = db.get_stats_for_specific_author("Stefano Ceri")
+        self.assertEqual(len(header), len(data[0]),
+            "header and data column size doesn't match")
+        self.assertEqual(data[0][1], 100,
+            "header and data column don't match")
+        self.assertEqual(data[0][2], 94,
+            "header and data column don't match")
+        self.assertEqual(data[0][3], 6,
+            "header and data column don't match")
+        self.assertEqual(data[0][4], 18,
+            "header and data column don't match")
+        self.assertEqual(data[0][5], 218,
+            "header and data column don't match")
+        self.assertEqual(data[0][6], 230,
+            "header and data column don't match")
+        
+    def test_get_particular_author_blank(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        header, data = db.get_stats_for_specific_author("")
+        self.assertEqual(len(data[0][0]), len("Author does not exist  "),
+            "header and data column don't match - blank")
+        self.assertEqual(data[0][1], 0, 
+            "header and data column don't match - blank")
+        self.assertEqual(data[0][2], 0, 
+            "header and data column don't match - blank")
+        self.assertEqual(data[0][3], 0, 
+            "header and data column don't match - blank")
+        self.assertEqual(data[0][4], 0, 
+            "header and data column don't match - blank")
+        self.assertEqual(data[0][5], 0, 
+            "header and data column don't match - blank")
 
+    def test_get_number_author_first(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-1.xml")))
+        header, data = db.get_times_an_author_appears_first()
+        self.assertEqual(len(data[0][0]), len("Author1"),
+            "header and data column don't match - first1")
+        self.assertEqual(data[0][1], 1, 
+            "header and data column don't match - first1")
+
+    def test_get_number_author_last(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "sprint-2-acceptance-1.xml")))
+        header, data = db.get_times_an_author_appears_last()
+        self.assertEqual(len(data[0][0]), len("Author1"),
+            "header and data column don't match - last1")
+        self.assertEqual(data[0][1], 1,
+            "header and data column don't match - last1")
+
+    def test_get_number_author_first2(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        header, data = db.get_times_an_author_appears_first()
+        self.assertEqual(len(data[1][0]), len("George Pavolv"),
+            "header and data column don't match - first2")
+        self.assertEqual(data[1][1], 1, 
+            "header and data column don't match - first2")
+        
+    def test_get_number_author_last2(self):
+        db = database.Database()
+        self.assertTrue(db.read(path.join(self.data_dir, "dblp_curated_sample.xml")))
+        header, data = db.get_times_an_author_appears_last()
+        self.assertEqual(len(data[1][0]), len("Piero Fraternali"),
+            "header and data column don't match - first2")
+        self.assertEqual(data[1][1], 7, 
+            "header and data column don't match - first2")        
+    
 if __name__ == '__main__':
     unittest.main()
